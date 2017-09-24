@@ -110,7 +110,45 @@ print('\n')
 print('* ' * 20)
 tiy3_7 = "You just found out that your new dinner table won't arrive in time for the dinner, and you have space for " \
          "only two guests."
-print("3-7. Shrinking Guest List:\n" + tiy3_7)
+print("3-7. Shrinking Guest List:\n" + tiy3_7 + '\n')
+
+# begin solution
+
+# copy list from 3-6
+guests = ["Abraham Lincoln, Vampire Slayer","Oprah Winfrey","Joan of Arc"]
+guests.insert(0, "Barefoot Contessa")
+guests.insert(len(guests)/2, "Princess Leia")
+guests.append("Paula Dean")
+rsvp_0 = guests[0] + ", my gratitudes for being such a wondrous companion. Please come to my dinner next morrow!"
+rsvp_1 = "How are the book sales going, " + guests[1] + "? Tell me about it over dinner sometime!"
+rsvp_2 = "Let's catch up -- are you free tomorrow, " + guests[2] + "?"
+rsvp_3 = "Hey " + guests[3] + "! Let's get brunch some time with the gals."
+rsvp_4 = "It's been a while since we've gone for coffee... are you free this Sunday, " + guests[4] + "?"
+rsvp_5 = "You. Me. Eat. 3:00pm tomorrow, " + guests[5] + "-- be there or be square."
+msgs = [rsvp_0, rsvp_1, rsvp_2, rsvp_3, rsvp_4, rsvp_5]
+
+notice = "Sorry y'all, I miscounted. You have to battle to the death to get the two spots actually available."
+print(notice)
+
+# remove guests from list one at a time
+n = len(guests)
+while n > 2:
+    print("Sorry " + guests[-1] + ", I cannot invite you to the dinner. Goodbye.")
+    guests.pop()
+    n = n-1
+
+for x in guests:
+    print("Congratulations, " + x + "! You're still in the running to eat dinner with me.")
+
+## Remove all guests
+# print(guests)
+for n in range(len(guests)):
+    del guests[0]
+
+# del guests <-- would delete the entire data structure instead of the elements only
+
+print(guests)
 
 
 
+# end solution
