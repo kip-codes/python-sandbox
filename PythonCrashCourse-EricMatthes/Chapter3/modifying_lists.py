@@ -59,3 +59,15 @@ guests.remove(y)
 print("\nThe intermediate guest list is now:")
 for i in guests:
     print(i)
+
+print('\n')
+
+newGuest = "DJ Khaled"
+guests.append(newGuest)
+
+newMsg = guests[-1] + ", I'm so glad you're here. Come to my dinner."
+msgs.append(newMsg)
+
+for m in msgs:
+    print m
+# end solution
