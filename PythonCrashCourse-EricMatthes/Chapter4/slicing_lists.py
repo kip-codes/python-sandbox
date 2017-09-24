@@ -25,3 +25,18 @@ print(toppings[-3:])
 print('\n')
 print('* ' *20)
 print("TiY 4-11. My Pizzas, Your Pizzas:\n")
+
+friend_toppings = toppings[:]
+toppings.append("zucchini")
+friend_toppings.append("avocado")
+
+# Prove the lists are different
+print("My favorite pizzas are:")
+for x in toppings[:-1]:
+    print x + ",",
+print "and " + toppings[-1] + ".\n"
+
+print("My friend's favorite pizzas are:")
+for x in friend_toppings[:-1]:
+    print x + ",",
+print "and " + friend_toppings[-1] + ".\n"
