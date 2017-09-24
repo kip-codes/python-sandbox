@@ -71,3 +71,46 @@ msgs.append(newMsg)
 for m in msgs:
     print m
 # end solution
+
+
+# Assignment prompt
+print('\n')
+print('* ' * 20)
+tiy3_6 = "You just found a bigger dinner table, so now more space is available. " \
+         "Think of three more guests to invite to dinner.\n"
+print("3-6. More Guests:\n" + tiy3_6)
+
+# copy list from 3-4
+guests = ["Abraham Lincoln, Vampire Slayer","Oprah Winfrey","Joan of Arc"]
+
+# add a guest at the beginning of the list
+guests.insert(0, "Barefoot Contessa")
+
+# add a guest to the middle of the list
+guests.insert(len(guests)/2, "Princess Leia")
+
+# add a guest to the end of the list
+guests.append("Paula Dean")
+
+rsvp_0 = guests[0] + ", my gratitudes for being such a wondrous companion. Please come to my dinner next morrow!"
+rsvp_1 = "How are the book sales going, " + guests[1] + "? Tell me about it over dinner sometime!"
+rsvp_2 = "Let's catch up -- are you free tomorrow, " + guests[2] + "?"
+rsvp_3 = "Hey " + guests[3] + "! Let's get brunch some time with the gals."
+rsvp_4 = "It's been a while since we've gone for coffee... are you free this Sunday, " + guests[4] + "?"
+rsvp_5 = "You. Me. Eat. 3:00pm tomorrow, " + guests[5] + "-- be there or be square."
+msgs = [rsvp_0, rsvp_1, rsvp_2, rsvp_3, rsvp_4, rsvp_5]
+
+# print all invitations
+for msg in msgs:
+    print msg
+
+
+# Assignment prompt
+print('\n')
+print('* ' * 20)
+tiy3_7 = "You just found out that your new dinner table won't arrive in time for the dinner, and you have space for " \
+         "only two guests."
+print("3-7. Shrinking Guest List:\n" + tiy3_7)
+
+
+
