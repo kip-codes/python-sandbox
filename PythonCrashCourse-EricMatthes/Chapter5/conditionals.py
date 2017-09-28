@@ -14,4 +14,4 @@ tiy5_1 = "5-1. Conditional Tests:\nWrite a series of conditional tests. Prince a
 print(tiy5_1)
 
 rnums = 1
-print("Is ")
+print("Is s")
