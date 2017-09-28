@@ -13,5 +13,5 @@ tiy5_1 = "5-1. Conditional Tests:\nWrite a series of conditional tests. Prince a
          "the result of each test.\nCreate at least 10 tests, with at least 5 evaluating to True and rest to false.\n"
 print(tiy5_1)
 
-rnums = [ for x in range(10)]
+rnums = 1
 print("Is ")
