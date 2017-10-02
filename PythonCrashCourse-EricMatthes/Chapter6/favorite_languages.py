@@ -38,7 +38,7 @@ for x in poll_prospects:
         print('\n' + x + ", thank you for telling us your favorite language is " + favorite_languages[x] + ".")
     else:
         print('\n' + x + ", we care about you as a client and would like to know more about you!")
-        newLanguage = raw_input("In the space alloted below, please tell us what your favorite language is.\n")
+        newLanguage = raw_input("In the space allotted below, please tell us what your favorite language is.\n")
         favorite_languages.update({x:newLanguage})
         poll_prospects[x] = 1
         print("Thank you for telling us! Your new default language is " + favorite_languages[x] + ".")
