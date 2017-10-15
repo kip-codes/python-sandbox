@@ -45,7 +45,7 @@ for x in poll_prospects:
 
 
 # check if poll prospects have been followed up on
-if all(set(poll_prospects.values())) == 0:
+if any(set(poll_prospects.values())) == 0:
     print("\nIt appears we are missing a few prospects.")
 else:
     print('= ' * 5 + "\nAll prospects have been followed up on. Congratulations!")

@@ -72,7 +72,7 @@ print("= " * 30)
 
 mainmenu_options = ["\n\t1. Create entry in database",
                     "\n\t2. Check status of individuals",
-                    "\n\t3. Exit program"]
+                    "\n\n\t0. Exit program"]
 
 # Menu options
 def addEntry() :
