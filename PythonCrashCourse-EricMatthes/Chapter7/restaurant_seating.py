@@ -31,22 +31,65 @@ import time, threading
 def hello():
     print("hello, Timer")
 
+# isValidArea(): Checks if user's preference can be accommodated
+def isValidArea(locPref):
+    global areas
+
+    if type(locPref) is str:
+        if locPref not in areas:
+            return 2
+
+def getAreaCap(locPref):
+    global areas
+
+    return areas[locPref]
+
+# printRooms(): Print all possible locations in restaurant to sit
+def printAllRooms():
+    global areas
+
+    for area in areas:
+        print("\t {}\t\t\t- Seats {}".format(area.title(), areas[area]))
+
+
+# printLargerRooms(): Prints every room above the party size requirement
+def printLargerRooms(partySize):
+    global areas
+
+    for area in areas:
+        if areas[area] >= partySize:
+            print('\t {}\t\t\t- Seats {}'.format(area.title(), areas[area]))
+
+
 # checkSeats(): Check how many seats at a table are ready for a customer.
 def checkSeats(partySize, name, locPref):
     global tables  # this allows access to the tables variable defined in main
 
-    for t in tables:
-        # If the customer requires a specific seat
-        if tables[t]['location'] == locPref:  # access the preferred location
-            if tables[t]['seated'] == 0 and tables[t]['ready'] >= partySize: # a table is cleaned and prepared for a customer
-                print("Alright " + name.title() + ", our table is ready for you. Please follow me.")
+    # If the customer's preference will not allow for their party size
+    if getAreaCap(locPref) < partySize:
+        print("I'm sorry, our tables in the {} cannot seat {} people. Might I recommend you to some areas that can "
+              "seat your party?".format(locPref, partySize))
+        printLargerRooms(partySize)
+        return 2
+
+    if locPref != 'any':  # If the customer requires a specific seat
+        for t in tables:
+            if tables[t]['location'] == locPref:  # access the preferred location
+                if tables[t]['seated'] == 0 and tables[t]['ready'] >= partySize: # a table is cleaned and prepared for a customer
+                    print("Alright " + name.title() + ", our table in the " + locPref + " is ready for you.")
+                    return t
+    else:  # Customer has no preference
+        for t in tables:
+            if tables[t]['seated'] == 0 and tables[t]['ready'] >= partySize:  # a table is cleaned and prepared for a customer
+                print("Alright " + name.title() + ", our table in the " + tables[t]['location'] + " is ready for you.")
                 return t
+
     # If nothing is available for them
     if locPref != 'any':
         print("I'm sorry " + name.title() + ", but our tables in the " + locPref + " are currently occupied.")
         return 2
     else:  # locPref is any
-        print("Please try again, there are no tables at all!")
+        print("Please try again, none of our tables are ready!")
         return 2
 
 
@@ -67,11 +110,34 @@ if __name__ == '__main__':
         "3a": {"ready": 10, "seated": 0, "location": "mezzanine"},
         "3b": {"ready": 12, "seated": 0, "location": "mezzanine"}
     }
+    areas = {
+        'bar': 2,
+        'lounge': 6,
+        'mezzanine': 12
+    }
 
-    print('\n\n')
+    print('\n\n\n\n\n')
     name = str(input("Good evening, what is your name: "))
-    partySize = int(input("Thank you, " + name.title() + ". And how big is your party: "))
-    preference = str(input("And where would you like to be seated tonight? You can enter 'any' if you do not have a "
-                       "preference: "))
+    print("Thank you, " + name.title() + ".")
+    while True:
+        try:
+            partySize = int(input("\nAnd how big is your party: "))
+            if not (partySize > 0):
+                raise ValueError()
+        except ValueError:
+            print("Unacceptable party size. Please try again.")
+        else: # success
+            print("Ok, party of " + str(partySize) + "...")
+            break
 
-    checkSeats(partySize,name,preference)
+    # Loop to take user input for place. Will continue until party size matches location preference conditions.
+    while True:
+        preference = str(input("\nWhere would you like to be seated tonight? You can type 'help' to see our options, "
+                               "or enter 'any' if you do not have a preference: ")).lower()
+        if preference == 'help':
+            printAllRooms()
+        else:
+            if isValidArea(preference) == 2:
+                print("Sorry, your preferred location is unavailable. Please try again.")
+            else:
+                checkSeats(partySize, name, preference)
