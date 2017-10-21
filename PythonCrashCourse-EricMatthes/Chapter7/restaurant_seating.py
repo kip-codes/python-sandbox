@@ -20,7 +20,7 @@ print("In this scenario, we assume that the restaurant is fully automated and en
       "appropriate table.")
 
 # BEGIN SOLUTION
-import time, threading
+import time, threading, random
 
 # ERROR CODES
 # 1: success
@@ -35,9 +35,11 @@ def hello():
 def isValidArea(locPref):
     global areas
 
-    if type(locPref) is str:
-        if locPref not in areas:
-            return 0
+    if locPref == 'any':
+        return 0
+
+    if locPref not in areas:
+        return 1
 
 def getAreaCap(locPref):
     global areas
@@ -49,7 +51,35 @@ def printAllRooms():
     global areas
 
     for area in areas:
-        print("\t {}\t\t\t- Seats {}".format(area.title(), areas[area]))
+        if len(area) < 9:
+            print('\t {}\t\t\t- Seats up to {}'.format(area.title(), areas[area]))
+        elif len(area) < 19:
+            print('\t {}\t\t- Seats up to {}'.format(area.title(), areas[area]))
+        else:
+            print('\t {}\t- Seats up to {}'.format(area.title(), areas[area]))
+
+
+# printLargerRooms(): Prints every room above the party size requirement
+def printLargerRooms(partySize):
+    global areas
+
+    for area in areas:
+        if areas[area] >= partySize:
+            if len(area) < 9:
+                print('\t {}\t\t\t- Seats up to {}'.format(area.title(), areas[area]))
+            elif len(area) < 19:
+                print('\t {}\t\t- Seats up to {}'.format(area.title(), areas[area]))
+            else:
+                print('\t {}\t- Seats up to {}'.format(area.title(), areas[area]))
+
+
+# printQueuedMsgs(): Prints any message that was stored into a list when waiting for user input. Simulates pop-up msgs.
+def printQueuedMsgs():
+    global alerts
+
+    if len(alerts) > 1:
+        for alert in alerts:
+            print(alert)
 
 
 # takePartySize(): Take input for party size
@@ -67,28 +97,12 @@ def takePartySize():
     return ps
 
 
-# printLargerRooms(): Prints every room above the party size requirement
-def printLargerRooms(partySize):
-    global areas
-
-    for area in areas:
-        if areas[area] >= partySize:
-            if len(area) < 9:
-                print('\t {}\t\t\t- Seats up to {}'.format(area.title(), areas[area]))
-            elif len(area) < 19:
-                print('\t {}\t\t- Seats up to {}'.format(area.title(), areas[area]))
-            else:
-                print('\t {}\t- Seats up to {}'.format(area.title(), areas[area]))
-
-
-
-
 # checkSeats(): Check how many seats at a table are ready for a customer.
 def checkSeats(partySize, name, locPref):
     global tables  # this allows access to the tables variable defined in main
 
     # If the customer's preference will not allow for their party size
-    if getAreaCap(locPref) < partySize:
+    if locPref != 'any' and getAreaCap(locPref) < partySize:
         print("I'm sorry, our tables in the {} cannot seat {} people. Might I recommend you to some areas that can "
               "seat your party?".format(locPref, partySize))
         printLargerRooms(partySize)
@@ -115,45 +129,72 @@ def checkSeats(partySize, name, locPref):
         return 2
 
 
-if __name__ == '__main__':
-    # t = threading.Timer(3.0, hello)
-    # t.start()
+# checkout(): Removes customer from the table, freeing up space for next customer
+def checkout(table):
+    global tables, alerts
 
+    # print(tables[table])
+    alerts.append("\n>>> {0} has paid their bill of {1:.2f}, and table {2} in the {3} has been cleared."
+                  .format(tables[table]["customer"].title(), random.uniform(50, 150), table
+                          , tables[table]["location"].title()))
+    tables[table]["seated"] = 0
+    tables[table]["customer"] = ""
+    print(threading.current_thread().getName(), 'Exiting')
+
+# seatCustomer(): Assigns a customer to a table, and changes the table's availability for future customers
+def seatCustomer(table, customer, partySize):
+    global tables, threads
+
+    tables[table]["customer"] = customer
+    tables[table]["seated"] = partySize
+    # print(tables[table])
+    print("Wonderful. We've placed you at table {}, {}. Enjoy your meal.\n\n".format(table, customer.title()))
+
+    t = threading.Timer(random.randint(3, 10), checkout, [table])
+    threads.append(t)
+    t.start()
+
+
+if __name__ == '__main__':
     # First, let's establish a dictionary of tables and presumed placements within the restaurant.
     # ready: seats that are ready for a customer (assume ready is fixed)
     # seated: seats currently occupied by a customer (cannot exceed ready)
     tables = {
-        "1a": {"ready": 2, "seated": 0, "location": "bar"},
-        "1b": {"ready": 2, "seated": 0, "location": "bar"},
-        "1c": {"ready": 2, "seated": 0, "location": "bar"},
-        "2a": {"ready": 5, "seated": 0, "location": "lounge"},
-        "2b": {"ready": 4, "seated": 0, "location": "lounge"},
-        "2c": {"ready": 6, "seated": 0, "location": "lounge"},
-        "3a": {"ready": 10, "seated": 0, "location": "mezzanine"},
-        "3b": {"ready": 12, "seated": 0, "location": "mezzanine"}
+        "1a": {"ready": 2, "seated": 0, "location": "bar", "customer": ""},
+        "1b": {"ready": 2, "seated": 0, "location": "bar", "customer": ""},
+        "1c": {"ready": 2, "seated": 0, "location": "bar", "customer": ""},
+        "2a": {"ready": 5, "seated": 0, "location": "lounge", "customer": ""},
+        "2b": {"ready": 4, "seated": 0, "location": "lounge", "customer": ""},
+        "2c": {"ready": 6, "seated": 0, "location": "lounge", "customer": ""},
+        "3a": {"ready": 10, "seated": 0, "location": "mezzanine", "customer": ""},
+        "3b": {"ready": 12, "seated": 0, "location": "mezzanine", "customer": ""}
     }
     areas = {
         'bar': 2,
         'lounge': 6,
         'mezzanine': 12
     }
+    alerts = []
+    threads  = []
 
     print('\n\n\n\n\n')
-    name = str(input("Good evening, what is your name: "))
-    print("Thank you, " + name.title() + ".")
 
-    partySize = takePartySize()
-
-    # Loop to take user input for place. Will continue until party size matches location preference conditions.
     while True:
-        preference = str(input("\nWhere would you like to be seated tonight? You can type 'help' to see our options, "
-                               "or enter 'any' if you do not have a preference: ")).lower()
-        if preference == 'help':
-            printAllRooms()
-        else:
-            if isValidArea(preference) == 0:
-                print("Sorry, your preferred location is unavailable. Please try again.")
-            else:  # valid area
-                result = checkSeats(partySize, name, preference)
-                if result != 2:
-                    print(result)
+        name = str(input("Good evening, what is your name: "))
+        print("Thank you, " + name.title() + ".")
+        partySize = takePartySize()
+        # Loop to take user input for place. Will continue until party size matches location preference conditions.
+        while True:
+            preference = str(input("\nWhere would you like to be seated tonight? You can type 'help' to see our options, "
+                                   "or enter 'any' if you do not have a preference: ")).lower()
+            if preference == 'help':
+                printAllRooms()
+            else:
+                if isValidArea(preference):
+                    print("Sorry, your preferred location is unavailable. Please try again.")
+                else:  # valid area
+                    result = checkSeats(partySize, name, preference)
+                    if result != 2:
+                        break
+
+        seatCustomer(result, name, partySize)
