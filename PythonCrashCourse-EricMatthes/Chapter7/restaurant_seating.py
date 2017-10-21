@@ -37,7 +37,7 @@ def isValidArea(locPref):
 
     if type(locPref) is str:
         if locPref not in areas:
-            return 2
+            return 0
 
 def getAreaCap(locPref):
     global areas
@@ -52,13 +52,35 @@ def printAllRooms():
         print("\t {}\t\t\t- Seats {}".format(area.title(), areas[area]))
 
 
+# takePartySize(): Take input for party size
+def takePartySize():
+    while True:
+        try:
+            ps = int(input("\nAnd how big is your party: "))
+            if not (ps > 0):
+                raise ValueError()
+        except ValueError:
+            print("Unacceptable party size. Please try again.")
+        else:  # success
+            print("Ok, party of " + str(ps) + "...")
+            break
+    return ps
+
+
 # printLargerRooms(): Prints every room above the party size requirement
 def printLargerRooms(partySize):
     global areas
 
     for area in areas:
         if areas[area] >= partySize:
-            print('\t {}\t\t\t- Seats {}'.format(area.title(), areas[area]))
+            if len(area) < 9:
+                print('\t {}\t\t\t- Seats up to {}'.format(area.title(), areas[area]))
+            elif len(area) < 19:
+                print('\t {}\t\t- Seats up to {}'.format(area.title(), areas[area]))
+            else:
+                print('\t {}\t- Seats up to {}'.format(area.title(), areas[area]))
+
+
 
 
 # checkSeats(): Check how many seats at a table are ready for a customer.
@@ -119,16 +141,8 @@ if __name__ == '__main__':
     print('\n\n\n\n\n')
     name = str(input("Good evening, what is your name: "))
     print("Thank you, " + name.title() + ".")
-    while True:
-        try:
-            partySize = int(input("\nAnd how big is your party: "))
-            if not (partySize > 0):
-                raise ValueError()
-        except ValueError:
-            print("Unacceptable party size. Please try again.")
-        else: # success
-            print("Ok, party of " + str(partySize) + "...")
-            break
+
+    partySize = takePartySize()
 
     # Loop to take user input for place. Will continue until party size matches location preference conditions.
     while True:
@@ -137,7 +151,9 @@ if __name__ == '__main__':
         if preference == 'help':
             printAllRooms()
         else:
-            if isValidArea(preference) == 2:
+            if isValidArea(preference) == 0:
                 print("Sorry, your preferred location is unavailable. Please try again.")
-            else:
-                checkSeats(partySize, name, preference)
+            else:  # valid area
+                result = checkSeats(partySize, name, preference)
+                if result != 2:
+                    print(result)
