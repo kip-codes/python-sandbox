@@ -89,7 +89,7 @@ def takePartySize():
     while True:
         try:
             ps = int(input("\nAnd how big is your party: "))
-            if ps < 0:
+            if ps <= 0:
                 raise ValueError()
         except ValueError:
             print("Unacceptable party size. Please try again.")
@@ -107,6 +107,7 @@ def takePartySize():
 # checkSeats(): Check how many seats at a table are ready for a customer.
 def checkSeats(partySize, name, locPref):
     global tables  # this allows access to the tables variable defined in main
+    global waitingList
 
     # If the customer's preference will not allow for their party size
     if locPref != 'any' and getAreaCap(locPref) < partySize:
@@ -129,13 +130,29 @@ def checkSeats(partySize, name, locPref):
                 return t
 
     # If nothing is available for them
-    if locPref != 'any':
+    if locPref != 'any':  # prefers a specific seating
         print("I'm sorry " + name.title() + ", but our tables in the " + locPref + " are currently occupied.")
-        return 2
-    else:  # locPref is any
-        print("There's currently an estimated waiting period of {} seconds for a table of your size, so please put "
-              "your name down and we'll seat you as soon as possible.".format(random.randint(5, 15)))
-        return 2
+        print("There's currently an estimated waiting period of {} seconds for a table of your size. "
+              "We have your name written down already, so we'll call you as soon as one is available! "
+              "\nThank you for waiting.\n".format(random.randint(5, 15) * (len(waitingList[locPref])+1)))
+        waitingList[locPref].insert(0, [name, partySize])  # adds customer to the queue for the table
+        return 1
+    else:  # no preference in seating
+
+        # Force assignment of table for waiting list
+        new_location = ''
+        if partySize <= 2:
+            new_location = 'bar'
+        elif partySize <= 6:
+            new_location = 'lounge'
+        else:
+            new_location = 'mezzanine'
+
+        print("There's currently an estimated waiting period of {} seconds for a table of your size. "
+              "We have your name written down already, so we'll call you as soon as one is available! "
+              "\nThank you for waiting.\n".format(random.randint(5, 15) * (len(waitingList[new_location])+1)))
+        waitingList[new_location].insert(0, [name, partySize])
+        return 1
 
 
 # checkout(): Removes customer from the table, freeing up space for next customer
@@ -144,11 +161,21 @@ def checkout(table):
 
     # print(tables[table])
     alerts.append(">>> {0} has paid their bill of ${1:.2f}, and table {2} in the {3} has been cleared."
-                  .format(tables[table]["customer"].title(), random.uniform(50, 150), table.upper()
-                          , tables[table]["location"].title()))
+                  .format(tables[table]["customer"].title(), random.uniform(50, 150)*tables[table]['seated']
+                          , table.upper(), tables[table]["location"].title()))
     tables[table]["seated"] = 0
     tables[table]["customer"] = ""
     # logging.debug('Exiting')
+
+
+    # Checks queue for existing customers on the waiting list for this table.
+    if waitingList[tables[table]['location']]:
+        new_customer = waitingList[tables[table]['location']].pop()  # gets the customer that arrived first
+        new_customer_name = new_customer[0]
+        new_customer_party = new_customer[1]
+
+        print("\n[!] >>> {}, thank you for waiting -- your table is ready!".format(new_customer_name.title()))
+        seatCustomer(table, new_customer_name, new_customer_party)
 
 
 # seatCustomer(): Assigns a customer to a table, and changes the table's availability for future customers
@@ -158,7 +185,7 @@ def seatCustomer(table, customer, partySize):
     tables[table]["customer"] = customer
     tables[table]["seated"] = partySize
     # print(tables[table])
-    print("Wonderful. We've placed you at table {}, {}. Enjoy your meal.\n\n".format(table.upper(), customer.title()))
+    print("Wonderful. We've placed you at table {0}, {1}. Enjoy your meal.\n\n".format(table.upper(), customer.title()))
     printQueuedMsgs()
 
     t = threading.Timer(random.randint(5, 15), checkout, [table])
@@ -166,11 +193,6 @@ def seatCustomer(table, customer, partySize):
     # print(threads)
     t.start()
 
-
-# saveTables(): Exports customers currently in the restaurant onto a text file.
-# Assumes customers get locked int the restaurant until it reopens.
-def saveTables():
-    file = open()
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG,
@@ -197,12 +219,19 @@ if __name__ == '__main__':
     }
     alerts = []
     threads = []
+    waitingList = {
+        "bar": [],
+        'lounge': [],
+        'mezzanine': []
+    }
 
     print('\n\n\n\n\n')
 
-    while True:
+    active = True
+    while active:
         name = str(input("Good evening, what is your name (0 to exit): "))
         if name == '0':
+            print("Thank you, have a good night!")
             sys.exit()
         print("Thank you, " + name.title() + ".")
         printQueuedMsgs()
@@ -213,6 +242,7 @@ if __name__ == '__main__':
             preference = str(input("\nWhere would you like to be seated tonight? You can type 'help' to see our options, "
                                    "or enter 'any' if you do not have a preference (0 to exit): ")).lower()
             if preference == '0':
+                print("Thank you, have a good night!")
                 sys.exit()
             if preference == 'help':
                 printAllRooms()
@@ -223,5 +253,5 @@ if __name__ == '__main__':
                     result = checkSeats(partySize, name, preference)
                     if result != 2:
                         break
-
-        seatCustomer(result, name, partySize)
+        if result != 1:
+            seatCustomer(result, name, partySize)
