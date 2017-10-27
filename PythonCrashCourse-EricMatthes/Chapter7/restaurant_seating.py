@@ -134,7 +134,7 @@ def checkSeats(partySize, name, locPref):
         print("I'm sorry " + name.title() + ", but our tables in the " + locPref + " are currently occupied.")
         print("There's currently an estimated waiting period of {} seconds for a table of your size. "
               "We have your name written down already, so we'll call you as soon as one is available! "
-              "\nThank you for waiting.\n".format(random.randint(5, 15) * (len(waitingList[locPref])+1)))
+              "\nThank you for waiting.\n".format(random.randint(15, 30) * (len(waitingList[locPref])+1)))
         waitingList[locPref].insert(0, [name, partySize])  # adds customer to the queue for the table
         return 1
     else:  # no preference in seating
@@ -150,7 +150,7 @@ def checkSeats(partySize, name, locPref):
 
         print("There's currently an estimated waiting period of {} seconds for a table of your size. "
               "We have your name written down already, so we'll call you as soon as one is available! "
-              "\nThank you for waiting.\n".format(random.randint(5, 15) * (len(waitingList[new_location])+1)))
+              "\nThank you for waiting.\n".format(random.randint(15, 30) * (len(waitingList[new_location])+1)))
         waitingList[new_location].insert(0, [name, partySize])
         return 1
 
@@ -188,7 +188,7 @@ def seatCustomer(table, customer, partySize):
     print("Wonderful. We've placed you at table {0}, {1}. Enjoy your meal.\n\n".format(table.upper(), customer.title()))
     printQueuedMsgs()
 
-    t = threading.Timer(random.randint(5, 15), checkout, [table])
+    t = threading.Timer(random.randint(15, 30), checkout, [table])
     threads.append(t)
     # print(threads)
     t.start()
