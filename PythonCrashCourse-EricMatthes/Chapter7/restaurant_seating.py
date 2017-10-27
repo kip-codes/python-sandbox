@@ -161,7 +161,7 @@ def checkout(table):
 
     # print(tables[table])
     alerts.append(">>> {0} has paid their bill of ${1:.2f}, and table {2} in the {3} has been cleared."
-                  .format(tables[table]["customer"].title(), random.uniform(50, 150)*tables[table]['seated']
+                  .format(tables[table]["customer"].title(), random.uniform(30, 70)*tables[table]['seated']
                           , table.upper(), tables[table]["location"].title()))
     tables[table]["seated"] = 0
     tables[table]["customer"] = ""
