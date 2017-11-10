@@ -22,6 +22,7 @@ print("In this scenario, we assume that the restaurant is fully automated and en
 # BEGIN SOLUTION
 import time, threading, random, logging, sys
 
+
 # ERROR CODES
 # 1: success
 # 2: prompt the user for another choice
