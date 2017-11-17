@@ -4,7 +4,7 @@ print("Hello world.")
 message = "Hello Python world."
 print(message)
 
-# Using the title() function, we can combine variables and uppercase the first letter of each word.
+# Using the title() function, we can combine 2. Variables and Simple Data Types and uppercase the first letter of each word.
 first_name = "ada"
 last_name = "lovelace"
 full_name = (first_name + " " + last_name).title()
