@@ -56,9 +56,20 @@ if __name__ == '__main__':
     print(restaurant.restaurantName, restaurant.cuisineType, '\n')
 
     restaurant.describeRestaurant()
+    time.sleep(1)
+
+    print('\n(Opening the restaurant...)')
     restaurant.openRestaurant()
     print('(Sleeping program for 5 seconds...)')
     time.sleep(5)
+
+    print('\n(When trying to open a restaurant that is already open...)')
     restaurant.openRestaurant()
+    time.sleep(1)
+
+    print('\n(Closing the restaurant...)')
     restaurant.closeRestaurant()
+    time.sleep(1)
+
+    print('\n(When trying to close a restaurant that is already closed...)')
     restaurant.closeRestaurant()
