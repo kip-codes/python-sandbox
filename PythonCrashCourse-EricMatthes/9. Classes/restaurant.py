@@ -73,3 +73,13 @@ if __name__ == '__main__':
 
     print('\n(When trying to close a restaurant that is already closed...)')
     restaurant.closeRestaurant()
+
+    veganRestaurant = Restaurant('Leaf Me Pea', 'Grass')
+    print('\n(Creating a vegan restaurant...)')
+    time.sleep(1)
+    veganRestaurant.describeRestaurant()
+
+    scamRestaurant = Restaurant('Nigerian Prince', 'Identify Theft')
+    print('\n(Creating a fake restaurant...)')
+    time.sleep(1)
+    scamRestaurant.describeRestaurant()
