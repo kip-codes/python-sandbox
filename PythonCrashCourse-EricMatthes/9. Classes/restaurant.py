@@ -12,13 +12,14 @@ def getPrompt():
              'Print the two attributes individually, and then call both methods.\n'
     print('* ' * 20, tiy9_1)
 
-class Restaurant():
+class Restaurant:
     """A simple attempt to represent a restaurant."""
 
     def __init__(self, restaurantName, cuisineType):
         """Initialize restaurant name and cuisine attributes."""
         self.restaurantName = restaurantName
         self.cuisineType = cuisineType
+        self.numberServed = 0
         self.open = False
         self.timeOpened = 0
 
@@ -46,6 +47,12 @@ class Restaurant():
         else:
             self.open = False
             print('The restaurant is now closed. See you tomorrow!')
+
+    def setNumberServed(self, numServed):
+        self.numberServed = numServed
+
+    def incrementNumServed(self, incServed):
+        self.numberServed += incServed
 
 
 
@@ -83,3 +90,5 @@ if __name__ == '__main__':
     print('\n(Creating a fake restaurant...)')
     time.sleep(1)
     scamRestaurant.describeRestaurant()
+
+    freshRestaurant = Restaurant('Freshtaurant', 'Juice')
