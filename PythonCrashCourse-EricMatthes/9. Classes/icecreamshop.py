@@ -18,18 +18,83 @@ class IceCreamStand(restaurant.Restaurant):
 
     def checkFlavors(self):
         """Prints list of flavors stored in attribute of the ice cream stand."""
-        pass
+        if len(self.flavors) == 0:
+            print("Sorry -- {rn} doesn't seem to sell any flavors at the moment.".format(rn=self.restaurantName))
+            return
+        print("{rn} sells these flavors:".format(rn=self.restaurantName))
+        for flavor in self.flavors:
+            print("-\t" + flavor)
 
     def changeFlavors(self):
         """Modifies the list of flavors available at the ice cream stand."""
-        pass
+        while True:
+            try:
+                prompt = "What would you like to do:" \
+                    "\n\t1. Add a flavor to the menu." \
+                    "\n\t2. Delete a flavor from the menu." \
+                    "\nEnter a number to select a choice." \
+                    "\n>> "
+                choice = int(input(prompt))
+                if choice <= 0:
+                    raise ValueError()
+            except ValueError:
+                print("Unacceptable choice. The input must be a digit without any trailing characters.")
+            else:  # valid choice
+                if choice == 1:
+                    self.addFlavor(self.takeFlavor(choice))
+                    break
+                elif choice == 2:
+                    self.removeFlavor(self.takeFlavor(choice))
+                    break
+                else:
+                    print("Invalid entry.")
+
+    def takeFlavor(self, choice):
+        """Takes input from user for adding or removing flavors."""
+        if choice == 1:
+            prompt = "\nEnter the flavor(s) you would like to add, and enter 'q' when done."
+        elif choice == 2:
+            prompt = "\nEnter the flavor(s) you would like to remove, and enter 'q' when done."
+        else:
+            prompt = "MISSING PROMPT"
+        print(prompt)
+        flavors = []
+        count = 1
+        while True:
+            print(str(count)+".\t")
+            flavor = input()
+            if flavor == 'q':
+                break
+            flavors.append(flavor)
+            count += 1  # Tracks the number of entries taken so far
+
+        print("You have entered:")
+        for flavor, n in enumerate(flavors, 1):
+            print(n + ".\t" + flavor)
+
+        while True:
+            c = input("\nAre you satisfied with this selection? (y/n)").lower()
+            if c == 'y' or c == 'yes':
+                return flavors
+            elif c == 'n' or c == 'no':
+                return []  # Returns an empty list so nothing gets modified
+            else:  # invalid entry
+                print("\nPlease enter yes or no.")
+
 
     def addFlavor(self, *flavors):
         """Adds one or more flavors to the ice cream stand."""
+        print("\nAdding the following items to the menu...")
+        for flavor in flavors:
+            print("+\t"+flavor)
+            self.flavors.append(flavor)
         pass
 
     def removeFlavor(self, *flavors):
         """"Deletes one or more flavors from the ice cream stand."""
+        print("\nDeleting the following items from the menu...")
+        for flavor in flavors:
+            print("-\t"+flavor)
         pass
 
 
