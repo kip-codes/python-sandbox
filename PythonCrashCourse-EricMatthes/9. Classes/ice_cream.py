@@ -81,23 +81,38 @@ class IceCreamStand(restaurant.Restaurant):
             else:  # invalid entry
                 print("\nPlease enter yes or no.")
 
-
     def addFlavor(self, *flavors):
         """Adds one or more flavors to the ice cream stand."""
         print("\nAdding the following items to the menu...")
         for flavor in flavors:
             print("+\t"+flavor)
-            self.flavors.append(flavor)
-        pass
+            if flavor not in self.flavors:
+                self.flavors.append(flavor)
+            else:  # flavor already exists on menu
+                print("\nThe flavor you would like to add is already on the menu, skipping over...")
 
     def removeFlavor(self, *flavors):
         """"Deletes one or more flavors from the ice cream stand."""
         print("\nDeleting the following items from the menu...")
         for flavor in flavors:
             print("-\t"+flavor)
-        pass
+            if flavor in self.flavors:
+                self.flavors.remove(flavor)
+            else:  # flavor is not in attribute0
+                print("\nThe flavor to be removed is not sold at {rn}, skipping over...".format(rn=self.restaurantName))
+
+    def mainMenu(self):
+        print("Hello ADMIN! You've selected a restaurant. What would you like to do?")
+        options = [
+            '\n1. Information about the selected restaurant.'
+            '\n2. Open the restaurant for business.'
+            '\n3. Close the restaurant for the day.'
+            '\n4. Establish'
+        ]
 
 
 if __name__ == '__main__':
-    pass
+    twoScoops = IceCreamStand('Two Scoops', 'ice cream')
+    twoScoops.mainMenu()
+
 

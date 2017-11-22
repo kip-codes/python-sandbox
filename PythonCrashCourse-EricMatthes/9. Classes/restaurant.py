@@ -27,6 +27,7 @@ class Restaurant:
         """"Prints attributes of restaurant."""
         print('The restaurant is called {}.'.format(self.restaurantName.title()))
         print('At {name}, they serve {cuisine}.'.format(name=self.restaurantName.title(), cuisine=self.cuisineType.lower()))
+        print('{rn} has served {n} parties so far.'.format(rn=self.restaurantName, n=self.numberServed))
 
     def openRestaurant(self):
         """Opens the restaurant to customers."""
