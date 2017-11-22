@@ -39,7 +39,7 @@ class Restaurant:
             newTime = time.time()
             print('The restaurant has been already open to customers for {:.0f} seconds.'.format(
                 newTime - self.timeOpened))
-            self.timeOpened = newTime
+            # self.timeOpened = newTime
 
     def closeRestaurant(self):
         """Closes the restaurant to customers."""
@@ -49,12 +49,26 @@ class Restaurant:
             self.open = False
             print('The restaurant is now closed. See you tomorrow!')
 
-    def setNumberServed(self, numServed):
+    def setNumServed(self, numServed):
         self.numberServed = numServed
 
     def incrementNumServed(self, incServed):
         self.numberServed += incServed
 
+    def askTablesServed(self):
+        while True:
+            try:
+                prompt = "How many tables have been served today?"
+                print(prompt)
+                tablesServed = int(input('\n>>\t'))
+                if tablesServed < 0:
+                    raise ValueError
+            except ValueError:
+                print("You can't serve that! Please enter a valid digit.")
+            else:  # valid entry
+                self.incrementNumServed(tablesServed)
+                break
+        print("{rn} has now served {n} tables. Yay!".format(rn=self.restaurantName, n=self.numberServed))
 
 
 if __name__ == '__main__':

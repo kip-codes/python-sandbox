@@ -5,8 +5,13 @@
 #
 # For inquiries about the file please contact the author.
 
-import restaurant
+import restaurant, time
 
+tiy9_6 = '9-6. Ice Cream Stand:\nAn ice cream stand is a specific kind of restaurant. Write a class called ' \
+         'IceCreamStand that inherits from the Restaurant class.' \
+         '\nAdd an attribute called \'flavors\' that stores a list of ice cream flavors. ' \
+         'Write a method that displays these flavors.' \
+         '\nCreate an instance of IceCreamStand, and call this method.\n'
 
 class IceCreamStand(restaurant.Restaurant):
     """Represents aspects of an ice cream stand, stemmed from the Restaurant type."""
@@ -16,38 +21,37 @@ class IceCreamStand(restaurant.Restaurant):
         super().__init__(restaurantName, cuisineType)
         self.flavors = []
 
-    def checkFlavors(self):
+    def printFlavors(self):
         """Prints list of flavors stored in attribute of the ice cream stand."""
         if len(self.flavors) == 0:
             print("Sorry -- {rn} doesn't seem to sell any flavors at the moment.".format(rn=self.restaurantName))
             return
         print("{rn} sells these flavors:".format(rn=self.restaurantName))
-        for flavor in self.flavors:
-            print("-\t" + flavor)
+        for n, flavor in enumerate(self.flavors, 1):
+            print(str(n) + ".\t" + flavor)
 
     def changeFlavors(self):
         """Modifies the list of flavors available at the ice cream stand."""
         while True:
-            try:
-                prompt = "What would you like to do:" \
-                    "\n\t1. Add a flavor to the menu." \
-                    "\n\t2. Delete a flavor from the menu." \
-                    "\nEnter a number to select a choice." \
-                    "\n>> "
-                choice = int(input(prompt))
-                if choice <= 0:
-                    raise ValueError()
-            except ValueError:
-                print("Unacceptable choice. The input must be a digit without any trailing characters.")
-            else:  # valid choice
-                if choice == 1:
-                    self.addFlavor(self.takeFlavor(choice))
-                    break
-                elif choice == 2:
+            prompt = "\nWhat would you like to do:" \
+                "\n\t1. Add a flavor to the menu." \
+                "\n\t2. Delete a flavor from the menu." \
+                "\n(Enter 'q' to exit.)"
+            print(prompt)
+            choice = input('\n>>\t')
+
+            if choice == 'q':
+                break
+            elif choice == '1':
+                self.addFlavor(self.takeFlavor(choice))
+                break
+            elif choice == '2':
+                self.printFlavors()
+                if len(self.flavors) > 0:
                     self.removeFlavor(self.takeFlavor(choice))
-                    break
-                else:
-                    print("Invalid entry.")
+                break
+            else:
+                print("Invalid entry.")
 
     def takeFlavor(self, choice):
         """Takes input from user for adding or removing flavors."""
@@ -61,19 +65,18 @@ class IceCreamStand(restaurant.Restaurant):
         flavors = []
         count = 1
         while True:
-            print(str(count)+".\t")
-            flavor = input()
+            flavor = input(str(count)+".\t")
             if flavor == 'q':
                 break
             flavors.append(flavor)
             count += 1  # Tracks the number of entries taken so far
 
         print("You have entered:")
-        for flavor, n in enumerate(flavors, 1):
-            print(n + ".\t" + flavor)
+        for n, flavor in enumerate(flavors, 1):
+            print(str(n) + ".\t" + flavor)
 
         while True:
-            c = input("\nAre you satisfied with this selection? (y/n)").lower()
+            c = input("\nAre you satisfied with this selection? (y/n)\n>>\t").lower()
             if c == 'y' or c == 'yes':
                 return flavors
             elif c == 'n' or c == 'no':
@@ -81,8 +84,11 @@ class IceCreamStand(restaurant.Restaurant):
             else:  # invalid entry
                 print("\nPlease enter yes or no.")
 
-    def addFlavor(self, *flavors):
+    def addFlavor(self, flavors):
         """Adds one or more flavors to the ice cream stand."""
+        if not flavors:
+            return
+
         print("\nAdding the following items to the menu...")
         for flavor in flavors:
             print("+\t"+flavor)
@@ -91,7 +97,7 @@ class IceCreamStand(restaurant.Restaurant):
             else:  # flavor already exists on menu
                 print("\nThe flavor you would like to add is already on the menu, skipping over...")
 
-    def removeFlavor(self, *flavors):
+    def removeFlavor(self, flavors):
         """"Deletes one or more flavors from the ice cream stand."""
         print("\nDeleting the following items from the menu...")
         for flavor in flavors:
@@ -102,17 +108,80 @@ class IceCreamStand(restaurant.Restaurant):
                 print("\nThe flavor to be removed is not sold at {rn}, skipping over...".format(rn=self.restaurantName))
 
     def mainMenu(self):
-        print("Hello ADMIN! You've selected a restaurant. What would you like to do?")
+        """Prints options for main menu."""
+        print("\nHello ADMIN! You've selected a restaurant. What would you like to do?")
         options = [
-            '\n1. Information about the selected restaurant.'
-            '\n2. Open the restaurant for business.'
-            '\n3. Close the restaurant for the day.'
-            '\n4. Establish'
+            '\n1. Information about the selected restaurant.',
+            '2. Open the restaurant for business.',
+            '3. Close the restaurant for the day.',
+            '4. Set how many tables have been waited today.',  # additional options
+            '5. Access menu items at the restaurant.',  # additional options
+            '(Enter \'q\' to exit.)'
         ]
+        for opt in options:
+            print(opt)
+
+    def flavorMenu(self):
+        """Prints options for accessing or modifying flavors"""
+        options = [
+            '\n1. Display information about the flavors available.',
+            '2. Modify the available flavors.',
+            '(Enter \'q\' to exit.)'
+        ]
+        for opt in options:
+            print(opt)
+
+    def flavorMenuNav(self):
+        """Allows user to navigate flavors."""
+        choice = ''
+        while choice != 'q':
+            self.flavorMenu()  # print menu
+            choice = input('\n>>\t')
+            if choice == '1':
+                self.printFlavors()
+                time.sleep(2)
+            elif choice == '2':
+                self.changeFlavors()
+                time.sleep(2)
+            # elif choice == 'q':
+            #     break
+            else:  # invalid choice
+                print('\nInvalid entry. Please enter the digit of the desired option from the list above.')
+                time.sleep(3)
+
+    def mainMenuNav(self):
+        """Allows user to navigate main menu options. Leads to other options if available."""
+        while True:
+            self.mainMenu()  # print menu
+            choice = input('\n>>\t')
+            if choice == 'q':
+                print("Thank you, see you soon! Be sure to leave some feedback about your experience in the our"
+                      " collection box by the door.")
+                break
+            elif choice == '1':
+                self.describeRestaurant()
+                time.sleep(2)
+            elif choice == '2':
+                self.openRestaurant()
+                time.sleep(2)
+            elif choice == '3':
+                self.closeRestaurant()
+                time.sleep(2)
+            elif choice == '4':
+                self.askTablesServed()
+                time.sleep(2)
+            elif choice == '5':
+                self.flavorMenuNav()
+                time.sleep(2)
+            else:  # invalid entry
+                print('\nInvalid entry. Please enter the digit of the desired option from the list above.')
+                time.sleep(3)
 
 
 if __name__ == '__main__':
-    twoScoops = IceCreamStand('Two Scoops', 'ice cream')
-    twoScoops.mainMenu()
+    print('* '*20)
+    print(tiy9_6)
 
+    twoScoops = IceCreamStand('Two Scoops', 'ice cream')
+    twoScoops.mainMenuNav()
 
