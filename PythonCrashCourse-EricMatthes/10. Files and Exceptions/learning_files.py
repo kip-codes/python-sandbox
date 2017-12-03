@@ -12,20 +12,25 @@ tiy10_1 = '10-1. Learning Python:\nWrite a program that reads a text file and pr
 
 def readEntireFile(filename):
     """Read and print contents of entire file."""
+    print('Reading entire file...\n*\n')
     with open(filename) as f:
         print(f.read().rstrip())  # will not print trailing whitespace
 
 def readLoopedFile(filename):
     """Read file by line, then print each line."""
+    print('Reading looped file...\n*\n')
     with open(filename) as f:
         for line in f:
-            print(line.rstrip())
+            print(line.rstrip())  # prints the file exactly as it is, line by line
 
 
 def readStoredFile(filename):
     """Read and store contents of a file into a list, then print the contents of the list."""
-    pass
-
+    print('Reading contents of a file stored into a variable...\n*\n')
+    with open(filename) as f:
+        lines = f.readlines()  # each line in the file is stored as an element in a list
+    for line in lines:
+        print(line.rstrip())
 
 
 if __name__ == '__main__':
@@ -38,3 +43,6 @@ if __name__ == '__main__':
     print('* ' * 3)
     readLoopedFile(filename)
     print('* ' * 3)
+    readStoredFile(filename)
+    print('* ' * 3)
+
