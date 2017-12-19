@@ -14,6 +14,7 @@ import urllib.request
 import json
 import csv
 
+
 def locu_search(query_city, query_category):
     """Parses JSON for the name of the restaurant and its phone number and exports to CSV."""
 
@@ -54,6 +55,7 @@ def locu_search(query_city, query_category):
                         row += element + ','
             csv_file.write(row + '\n')
     csv_file.close()
+
 
 if __name__ == '__main__':
     query_city = input("Please enter the city you would like to search for local restaurants: ")
