@@ -4,6 +4,10 @@
 # Created on 11/21/2017 at 7:04 PM
 #
 # For inquiries about the file please contact the author.
+import sys
+
+scriptpath = '/Users/kevinip/Documents/POST GRAD/PyCharm Projects/PythonCrashCourse/PythonCrashCourse-EricMatthes/9. Classes'
+sys.path.insert(0, scriptpath)
 
 import restaurant, time
 

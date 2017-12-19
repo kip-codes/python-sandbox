@@ -1,0 +1,11 @@
+In Python you can generate scripts to automate the easy things to do.
+These scripts can retrieve and present data, and by accessing third-party API's, can apply in a variety of environments.
+For example, Python can be used in web applications in a similar way as Javascript.
+Moreover, Python has plenty of modules that can open doors to other applications, ranging from data manipulation to
+video game development.
+
+There are some newlines in this text file.
+
+And below are three newlines that are trailing...
+
+
