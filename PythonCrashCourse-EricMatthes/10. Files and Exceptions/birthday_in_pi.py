@@ -7,10 +7,13 @@
 
 from datetime import datetime
 
+
 def welcomeMessage():
     print('Welcome! This program will allow you to see if your birthday is in the first million digits of pi.')
 
+
 def takeFullBirthday():
+    global birthday
     correctBirthday = False
     while not correctBirthday:
         birthday = input('Please enter the month, day, and year of your birthday in the format (mm/dd/yyyy), '
@@ -24,11 +27,13 @@ def takeFullBirthday():
             correctBirthday = True
         elif confirm == 'no' or confirm == 'n':
             print('That\'s ok. Let\'s start over.\n')
-    return birthday.replace('/', '')
+        return birthday.replace('/', '')
+
 
 def convertSimpleBirthday(birthday):
     birthday = birthday[:4] + birthday[6:]
-    return(birthday)
+    return (birthday)
+
 
 def readPi(filename):
     with open(filename) as file:
@@ -39,8 +44,10 @@ def readPi(filename):
         pi_string += line.rstrip()
     return pi_string
 
+
 if __name__ == '__main__':
-    filename = '/Users/kevinip/Documents/POST GRAD/PyCharm Projects/PythonCrashCourse/PythonCrashCourse-EricMatthes/ehmatthes-pcc-7597c2b/chapter_10/pi_million_digits.txt'
+    filename = '/Users/kevinip/Documents/GitHub/PythonCrashCourse-EricMatthes/Resources/ehmatthes-pcc_2e-078318e' \
+               '/chapter_10 '
     pi_million_digits = readPi(filename)
 
     welcomeMessage()
@@ -59,4 +66,3 @@ if __name__ == '__main__':
                 print('However, the simplified format (mmddyy) is there! Congratulations!')
             else:
                 print('The simplified format (mmddyy) is also absent from the first million digits. Sorry!')
-
